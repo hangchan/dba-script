@@ -66,8 +66,8 @@ func printFTable(results []string) []string {
 	var colOutput []string
 	for _, v := range results {
 		reStr := regexp.MustCompile(`^\s\s.(.*?).\s(.*?)\s.*,$`)
-		reInt := regexp.MustCompile(`^(.*?)\s(int)\((\d+)\)$`)
-		reVar := regexp.MustCompile(`^(.*?)\s(varchar)\((\d+)\)$`)
+		reInt := regexp.MustCompile(`^(.*?)\s(bigint|tinyint|int)\((\d+)\)$`)
+		reVar := regexp.MustCompile(`^(.*?)\s(char|varchar)\((\d+)\)$`)
 		reTime := regexp.MustCompile(`^(.*?)\s(datetime|timestamp)$`)
 		reEnum := regexp.MustCompile(`^(.*?)\s(enum.*?)$`)
 		if reStr.MatchString(v) {
@@ -78,11 +78,11 @@ func printFTable(results []string) []string {
 			//fmt.Println(output)
 			switch {
 			case reInt.MatchString(output):
-				repInt := "$1 $2"
+				repInt := "$1 int"
 				intOutput := reInt.ReplaceAllString(output, repInt)
 				colOutput = append(colOutput, fmt.Sprintf("%s", intOutput))
 			case reVar.MatchString(output):
-				repVar := "$1 $2($3)"
+				repVar := "$1 varchar($3)"
 				varOutput := reVar.ReplaceAllString(output, repVar)
 				colOutput = append(colOutput, fmt.Sprintf("%s", varOutput))
 			case reTime.MatchString(output):
